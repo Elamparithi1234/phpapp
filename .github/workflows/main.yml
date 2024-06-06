@@ -20,6 +20,10 @@ jobs:
       
     - name: Connect and Pull
       run: |
-        sshpass -f /tmp/password.txt ssh -tt elam@3.80.122.51 ls
+        sshpass -f /tmp/password.txt ssh -tt elam@3.80.122.51 << 'EOF'
+        # Commands to run on the remote server
+        cd /var/www/html
+        sudo git pull origin master
+        EOF
 
 
