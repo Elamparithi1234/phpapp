@@ -17,7 +17,11 @@ jobs:
       
     - name: Connect and Pull
       run: |
-        echo "Elam@1234" | sshpass -e ssh elam@3.80.122.51 
+        export SSHPASS="Elam@1234"
+        sshpass -e ssh elam@3.80.122.51
+
+
+
 
 
         
