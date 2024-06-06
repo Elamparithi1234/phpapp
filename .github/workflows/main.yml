@@ -1,4 +1,3 @@
-
 on:
   push:
     branches:
@@ -13,11 +12,17 @@ jobs:
     steps:
     - name: install ssh keys
       run: |
-        install -m 600 -D /dev/null ~/.ssh/id_rsa
+        mkdir -p ~/.ssh
         echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
         ssh-keyscan -H ${{ secrets.SSH_HOST }} > ~/.ssh/known_hosts
+        
     - name: connect and pull
-      run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "cd /var/www/html && git pull origin master
+      run: |
+        ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "cd /var/www/html && git pull origin master"
+        
+    - name: cleanup ssh keys
       run: rm -rf ~/.ssh
+
 
 
