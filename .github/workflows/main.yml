@@ -15,12 +15,11 @@ jobs:
     - name: Install sshpass
       run: sudo apt update && sudo apt install -y sshpass
       
+    - name: Create password file
+      run: echo "Elam@1234" > /tmp/password.txt
+      
     - name: Connect and Pull
       run: |
-        export SSHPASS="Elam@1234"
-        sshpass -e -T ssh elam@3.80.122.51
-
-
-
+        sshpass -f /tmp/password.txt ssh elam@3.80.122.51
 
         
