@@ -19,6 +19,7 @@ jobs:
         host: ${{ secrets.SSH_HOST }}
         username: ${{ secrets.SSH_USER }}
         password: ${{ secrets.SSH_PASSWD }}
+        port: ${{ secrets.SSH_PORT }}
         script: |
           cd /var/www/html
           sudo -S git pull origin master 
