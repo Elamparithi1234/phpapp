@@ -17,4 +17,5 @@ jobs:
       
     - name: Connect and Pull
       run: |
-        sshpass -p "Elam@1234" ssh elam@3.80.122.51 
+        sshpass -p "Elam@1234" ssh -T elam@3.80.122.51
+ 
