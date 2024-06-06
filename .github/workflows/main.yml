@@ -1,29 +1,20 @@
-name: Laravel Deployment
+name: Git Pull and Artisan Commands
 
 on:
   push:
     branches:
       - master
+  workflow_dispatch:
 
 jobs:
-  laravel-deploy:
+  run_pull:
+    name: Run Pull and Artisan Commands
     runs-on: ubuntu-latest
-
+    
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-
-    - name: Deploy Laravel Application
-      uses: appleboy/ssh-action@v0.1.2
-      with:
-        host: ${{ secrets.SSH_HOST }}
-        username: ${{ secrets.SSH_USER }}
-        password: ${{ secrets.SSH_PASSWD }}
-        port: ${{ secrets.SSH_PORT }}
-        script: |
-          cd /var/www/html
-          sudo -S git pull origin master 
-          sudo -S php artisan cache:clear
-          sudo -S php artisan config:clear 
-          sudo -S php artisan view:clear 
-          sudo -S php artisan route:clear 
+    - name: Install sshpass
+      run: sudo apt update && sudo apt install -y sshpass
+      
+    - name: Connect and Pull
+      run: |
+        sshpass -p "Elam@1234" ssh elam@3.80.122.51 'cd /var/www/html/phpapp && sudo git pull origin master && sudo php artisan cache:clear && sudo php artisan view:clear && sudo php artisan config:clear && sudo php artisan route:clear'
