@@ -1,27 +1,31 @@
+name: Git Pull and Artisan Commands
+
 on:
   push:
     branches:
       - master
   workflow_dispatch:
-  
+
 jobs:
   run_pull:
-    name: run pull
+    name: Run Pull and Artisan Commands
     runs-on: ubuntu-latest
     
     steps:
-    - name: install ssh keys
+    - name: Install sshpass
+      run: sudo apt update && sudo apt install -y sshpass
+      
+    - name: Create password file
+      run: echo "Elam@1234" > /tmp/password.txt
+      
+    - name: Connect and Pull
       run: |
-        mkdir -p ~/.ssh
-        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-        chmod 600 ~/.ssh/id_rsa
-        ssh-keyscan -H ${{ secrets.SSH_HOST }} > ~/.ssh/known_hosts
-        
-    - name: connect and pull
-      run: |
-        ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "cd /var/www/html && git pull origin master && cd phpapp && php artisan cache:clear && php artisan config:clear && php artisan view:clear && php artisan route:clear"
-        
-    - name: cleanup ssh keys
-      run: rm -rf ~/.ssh
+        sshpass -f /tmp/password.txt ssh -tt elam@3.80.122.51 << EOF
+        # Commands to run on the remote server
+        cd /path/to/your/directory
+        git pull
+        php artisan migrate
+        # Add more commands as needed
+        EOF
 
 
