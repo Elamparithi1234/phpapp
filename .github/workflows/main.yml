@@ -1,0 +1,33 @@
+name: Laravel Deployment
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  laravel-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Install SSH key
+      uses: webfactory/ssh-agent@v0.5.3
+      with:
+        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+    - name: Deploy Laravel Application
+      uses: appleboy/ssh-action@v0.1.2
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USER }}
+        password: ${{ secrets.SSH_PASSWD }}
+        script: |
+          cd /var/www/html
+          sudo -S git pull origin master 
+          sudo -S php artisan cache:clear
+          sudo -S php artisan config:clear 
+          sudo -S php artisan view:clear 
+          sudo -S php artisan route:clear 
