@@ -17,4 +17,4 @@ jobs:
       
     - name: Connect and Pull
       run: |
-        sshpass -p "Elam@1234" ssh elam@3.80.122.51 && 'cd /var/www/html/phpapp && sudo git pull origin master && sudo php artisan cache:clear && sudo php artisan view:clear && sudo php artisan config:clear && sudo php artisan route:clear'
+        sshpass -p "Elam@1234" ssh elam@3.80.122.51 
