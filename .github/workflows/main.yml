@@ -18,8 +18,7 @@ jobs:
     - name: Connect and Pull
       run: |
         export SSHPASS="Elam@1234"
-        sshpass -e ssh elam@3.80.122.51
-
+        sshpass -e -T ssh elam@3.80.122.51
 
 
 
