@@ -1,22 +1,22 @@
-name: Laravel
+
+name: Git Pull and Artisan Commands
 
 on:
   push:
-    branches: [ "master" ]
-
+    branches:
+      - master
+  workflow_dispatch:
 
 jobs:
-  laravel-tests:
-
+  run_pull:
+    name: Run Pull and Artisan Commands
     runs-on: ubuntu-latest
+    
     steps:
-     - name: Deploy Mentor Application
-       uses: appleboy/ssh-action@v0.1.2
-       with:
-        host: ${{ secrets.SSH_HOST }}
-        username: ${{ secrets.SSH_USER }}
-        password: ${{ secrets.SSH_PASSWD }}
-        script: |
-          cd /var/www/html
-          sudo git pull origin master
- 
+    - name: Install sshpass
+      run: sudo apt update && sudo apt install -y sshpass
+      
+    - name: Connect and Pull
+      run: sshpass -p "Elam@1234" ssh elam@3.80.122.51 
+        
+        
