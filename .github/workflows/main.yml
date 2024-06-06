@@ -1,29 +1,23 @@
-name: Git Pull and Artisan Commands
 
 on:
   push:
     branches:
       - master
   workflow_dispatch:
-
+  
 jobs:
   run_pull:
-    name: Run Pull and Artisan Commands
+    name: run pull
     runs-on: ubuntu-latest
     
     steps:
-    - name: Install sshpass
-      run: sudo apt update && sudo apt install -y sshpass
-      
-    - name: Create password file
-      run: echo "Elam@1234" > /tmp/password.txt
-      
-    - name: Connect and Pull
+    - name: install ssh keys
       run: |
-        sshpass -f /tmp/password.txt ssh -tt elam@3.80.122.51 << 'EOF'
-        # Commands to run on the remote server
-        cd /var/www/html
-        sudo git pull origin master
-        EOF
+        install -m 600 -D /dev/null ~/.ssh/id_rsa
+        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+        ssh-keyscan -H ${{ secrets.SSH_HOST }} > ~/.ssh/known_hosts
+    - name: connect and pull
+      run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "cd /var/www/html && git pull origin master
+      run: rm -rf ~/.ssh
 
 
